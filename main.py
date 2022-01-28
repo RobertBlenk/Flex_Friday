@@ -7,11 +7,11 @@ def main():
 
 
 
-    window = Tk()
-    window.title("FlashCards")
-    window.geometry("1250x405+5+5")
-    window.resizable(True, True)
-    window.mainloop()
+    window1 = Tk()
+    window1.title("FlashCards")
+    window1.geometry("1250x405+5+5")
+    window1.resizable(True, True)
+    window1.mainloop()
 
 
 if __name__ == '__main__':
