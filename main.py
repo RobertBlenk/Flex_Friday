@@ -1,12 +1,15 @@
 from tkinter import *
-
 window_main = Tk()
 
 
 def input_word():
     window_inp = Tk()
     t1 = Entry(window_inp)
-    t1.place(x=80, y=80)
+    t2 = Button(window_inp, text="Enter")
+    t3 = Label(window_inp, text="Enter words here")
+    t1.place(x=20, y=22)
+    t2.place(x=20, y=42)
+    t3.place(x=20, y=0)
     window_inp.title("Input screen")
     window_inp.geometry("850x300+5+5")
     window_inp.resizable(False, False)
@@ -39,7 +42,7 @@ def esc_command():  # separate window
     d1.place()
 
     window_esc.title("Escape")
-    window_esc.geometry("850x300+5+5")
+    window_esc.geometry("166x166+5+5")
     window_esc.resizable(False, False)
     window_esc.mainloop()
 
