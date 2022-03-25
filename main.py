@@ -11,20 +11,27 @@ def main():
         english = t1a.get()
         print(english)
         t1a.delete(0, 'end')
+        print(category)
 
     def tb():
+        global category
+        category = "Basic"
         print("pressed tb")
         t_b.config(relief=SUNKEN)
         t_n.config(relief=RAISED)
         t_v.config(relief=RAISED)
 
     def tn():
+        global category
+        category = "Noun"
         print("pressed tn")
         t_b.config(relief=RAISED)
         t_n.config(relief=SUNKEN)
         t_v.config(relief=RAISED)
 
     def tv():
+        global category
+        category = "Verb"
         print("pressed tv")
         t_b.config(relief=RAISED)
         t_n.config(relief=RAISED)
