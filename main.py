@@ -14,7 +14,8 @@ c = conn.cursor()
 #  conn.commit()
 #  conn.close()
 #c.execute("SELECT * FROM korean WHERE english='hello'")
-#print(c.fetchone())
+#c.execute("SELECT * FROM korean WHERE category='Basic'")
+#print(c.fetchall())
 
 
 def main():
