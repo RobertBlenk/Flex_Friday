@@ -1,5 +1,7 @@
 from tkinter import *
 import sqlite3
+import random
+
 window_main = Tk()
 conn = sqlite3.connect(database='database.db')
 c = conn.cursor()
@@ -161,12 +163,58 @@ def main():
 
     def flip():
         print("flipped")
+
     # main starts
+    c.execute("SELECT * FROM korean ")
+    x_list = list(c.fetchall())
+    x_set = set()
+    f = True
+
+    while f == True:
+        x = random.randint(0, (len(x_list) - 1))
+        x_set.add(x_list[x])
+
+        if len(x_set) >= 4:
+            f = False
+
+    x_list2 = list(x_set)
+    list2 = list("")
+
+    for r in range(0, 4):
+        l = list(x_list2[r])
+        list2.append(l[2])
+
+    w = x_list2[0]
+    w2 = Input_word(w[0], w[1], w[2], w[3])
+    c.execute("SELECT * FROM korean WHERE english= (:eng)", {'eng': w2.english})
+    w3 = c.fetchone()
+    print(w3)
+
+    et1 = random.choice(list2)
+    list2.remove(et1)
+    et2 = random.choice(list2)
+    list2.remove(et2)
+    et3 = random.choice(list2)
+    list2.remove(et3)
+    et4 = random.choice(list2)
+    list2.remove(et4)
 
     e1 = Button(window_main, text="Esc", command=esc_command)
-    e2 = Button(window_main, text="Flip", command=flip)
+    e2 = Button(window_main, text=et1, command=flip)
+    e3 = Button(window_main, text=et2, command=flip)
+    e4 = Button(window_main, text=et3, command=flip)
+    e5 = Button(window_main, text=et4, command=flip)
+    e6 = Label(window_main, text=w3[0], font=("", 70))
+    e7 = Label(window_main, text=w3[1], font=("", 20))
+    e8 = Button(window_main, text="Enter", command=flip)
     e1.place(x=0, y=0)
-    e2.place(x=625, y=380)
+    e2.place(x=1000, y=20)
+    e3.place(x=1000, y=60)
+    e4.place(x=1000, y=100)
+    e5.place(x=1000, y=140)
+    e6.place(x=360, y=20)
+    e7.place(x=460, y=200)
+    e8.place(x=1000, y=190)
 
     window_main.title("FlashCards")
     window_main.geometry("1250x405+5+5")
