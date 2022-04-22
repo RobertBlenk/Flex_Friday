@@ -161,10 +161,62 @@ def main():
         window_esc.resizable(False, False)
         window_esc.mainloop()
 
-    def flip():
-        print("flipped")
+    def cor():
+        #  this is just "resetting" the buttons by just "coloring" over them with spaces
+        d1 = Label(window_main, text="                                   ", font=(" ", 100))
+        d2 = Label(window_main, text="                                   ", font=(" ", 100))
+        d3 = Label(window_main, text="                                   ", font=(" ", 100))
+        d4 = Label(window_main, text="                                   ", font=(" ", 100))
+        d5 = Label(window_main, text="                                   ", font=(" ", 100))
+        d6 = Label(window_main, text="                                   ", font=(" ", 100))
+        d1.place(x=1000, y=20)
+        d2.place(x=1000, y=60)
+        d3.place(x=1000, y=100)
+        d4.place(x=1000, y=140)
+        d5.place(x=360, y=20)
+        d6.place(x=460, y=200)
+        window_main.quit()
+        main()
+
+    def f_et1():
+        if et1 == ans:
+            print("correct")
+            cor()
+        else:
+            print("incorrect")
+            cor()
+
+    def f_et2():
+        if et2 == ans:
+            print("correct")
+            cor()
+        else:
+            print("incorrect")
+            cor()
+
+    def f_et3():
+        if et3 == ans:
+            print("correct")
+            cor()
+        else:
+            print("incorrect")
+            cor()
+
+    def f_et4():
+        if et4 == ans:
+            print("correct")
+            cor()
+        else:
+            print("incorrect")
+            cor()
 
     # main starts
+
+    global et1
+    global et2
+    global et3
+    global et4
+    global ans
     c.execute("SELECT * FROM korean ")
     x_list = list(c.fetchall())
     x_set = set()
@@ -188,7 +240,7 @@ def main():
     w2 = Input_word(w[0], w[1], w[2], w[3])
     c.execute("SELECT * FROM korean WHERE english= (:eng)", {'eng': w2.english})
     w3 = c.fetchone()
-    print(w3)
+    ans = w3[2]
 
     et1 = random.choice(list2)
     list2.remove(et1)
@@ -200,13 +252,12 @@ def main():
     list2.remove(et4)
 
     e1 = Button(window_main, text="Esc", command=esc_command)
-    e2 = Button(window_main, text=et1, command=flip)
-    e3 = Button(window_main, text=et2, command=flip)
-    e4 = Button(window_main, text=et3, command=flip)
-    e5 = Button(window_main, text=et4, command=flip)
+    e2 = Button(window_main, text=et1, command=f_et1)
+    e3 = Button(window_main, text=et2, command=f_et2)
+    e4 = Button(window_main, text=et3, command=f_et3)
+    e5 = Button(window_main, text=et4, command=f_et4)
     e6 = Label(window_main, text=w3[0], font=("", 70))
     e7 = Label(window_main, text=w3[1], font=("", 20))
-    e8 = Button(window_main, text="Enter", command=flip)
     e1.place(x=0, y=0)
     e2.place(x=1000, y=20)
     e3.place(x=1000, y=60)
@@ -214,13 +265,11 @@ def main():
     e5.place(x=1000, y=140)
     e6.place(x=360, y=20)
     e7.place(x=460, y=200)
-    e8.place(x=1000, y=190)
 
     window_main.title("FlashCards")
     window_main.geometry("1250x405+5+5")
     window_main.resizable(False, False)
     window_main.mainloop()
-
 
 if __name__ == '__main__':
     main()
