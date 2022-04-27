@@ -2,10 +2,32 @@ from tkinter import *
 import sqlite3
 import random
 
+score = 0
 window_main = Tk()
 conn = sqlite3.connect(database='database.db')
 c = conn.cursor()
-# this was me making the table for korean, I only had to do this once but, I wanted to keep it there.
+donn = sqlite3.connect(database='score.db')
+d = donn.cursor()
+d.execute("DELETE FROM current")
+d.execute("INSERT INTO current VALUES (0, 0, 0)")
+#  d.execute("INSERT INTO High VALUES (0)")
+#  d.execute("DELETE FROM High")
+donn.commit()
+
+# This is how I made the tables in SQL, just wanted to keep them here for reference.
+#  d.execute("""CREATE TABLE current(
+            #score integer,
+            #correct integer,
+            #incorrect integer
+            #)""")
+#  donn.commit()
+#  d.close()
+#  d.execute("""CREATE TABLE High(
+            #score integer
+            #)""")
+#  donn.commit()
+#  d.close()
+
 #  c.execute("""CREATE TABLE korean(
             #hangul text,
             #romaja text,
@@ -15,9 +37,9 @@ c = conn.cursor()
 
 #  conn.commit()
 #  conn.close()
-#c.execute("SELECT * FROM korean WHERE english='hello'")
-#c.execute("SELECT * FROM korean WHERE category='Basic'")
-#print(c.fetchall())
+#  c.execute("SELECT * FROM korean WHERE english='hello'")
+#  c.execute("SELECT * FROM korean WHERE category='Basic'")
+#  print(c.fetchall())
 
 
 def main():
@@ -29,6 +51,13 @@ def main():
             self.romaja = rom
             self.english = eng
             self.category = cat
+
+    class input_score:
+
+        def __init__(self, score, corr, incorr):
+            self.score = score
+            self.correct = corr
+            self.incorrect = incorr
 
     def entered():
         var_hangul = str(t1.get())
@@ -162,6 +191,38 @@ def main():
         window_esc.mainloop()
 
     def cor():
+        d.execute("SELECT * FROM current")
+        x_ = d.fetchone()
+        d.execute("DELETE FROM current")
+
+        c_ = int(x_[0])
+        d_ = int(x_[1])
+        d_ += 1
+        e_ = int(x_[2])
+        c_ += 100
+        z = input_score(c_, d_, e_)
+
+        d.execute("INSERT INTO current VALUES (?, ?, ?)", (z.score, z.correct, z.incorrect))
+        d.execute("SELECT * FROM current")
+        #  print(d.fetchall())
+        #  print("correct")
+
+        #  this is the high score portion of the code
+        d.execute("SELECT * FROM High")
+        hh = d.fetchone()
+        print(hh[0])
+        print(z.score)
+        if int(z.score) > int(hh[0]):
+            print("Beat High score")
+            d.execute("DELETE FROM High")
+            f = input_score(z.score, 0, 0)
+            d.execute("INSERT INTO High VALUES (:scr)", {'scr': z.score})
+            db1 = Label(window_main, text="                             ")
+            db2 = Label(window_main, text=str(z.score))
+            db1.place(x=55, y=10)
+            db2.place(x=110, y=10)
+            donn.commit()
+
         #  this is just "resetting" the buttons by just "coloring" over them with spaces
         d1 = Label(window_main, text="                                   ", font=(" ", 100))
         d2 = Label(window_main, text="                                   ", font=(" ", 100))
@@ -169,49 +230,80 @@ def main():
         d4 = Label(window_main, text="                                   ", font=(" ", 100))
         d5 = Label(window_main, text="                                   ", font=(" ", 100))
         d6 = Label(window_main, text="                                   ", font=(" ", 100))
+        d7 = Label(window_main, text="               ", font=("", 15))
+        d8 = Label(window_main, text=str(z.score), font=("", 15))
         d1.place(x=1000, y=20)
         d2.place(x=1000, y=60)
         d3.place(x=1000, y=100)
         d4.place(x=1000, y=140)
         d5.place(x=360, y=20)
         d6.place(x=460, y=200)
+        d7.place(x=60, y=35)
+        d8.place(x=100, y=35)
+        window_main.quit()
+        main()
+
+    def incor():
+        d.execute("SELECT * FROM current")
+        x_ = d.fetchone()
+        d.execute("DELETE FROM current")
+
+        c_ = int(x_[0])
+        d_ = int(x_[1])
+        e_ = int(x_[2])
+        e_ += 1
+        c_ -= 50
+        z = input_score(c_, d_, e_)
+
+        d.execute("INSERT INTO current VALUES (?, ?, ?)", (z.score, z.correct, z.incorrect))
+        d.execute("SELECT * FROM current")
+        #  print(d.fetchall())
+
+        #  print("incorrect")
+        d1 = Label(window_main, text="                                   ", font=(" ", 100))
+        d2 = Label(window_main, text="                                   ", font=(" ", 100))
+        d3 = Label(window_main, text="                                   ", font=(" ", 100))
+        d4 = Label(window_main, text="                                   ", font=(" ", 100))
+        d5 = Label(window_main, text="                                   ", font=(" ", 100))
+        d6 = Label(window_main, text="                                   ", font=(" ", 100))
+        d7 = Label(window_main, text="               ", font=("", 15))
+        d8 = Label(window_main, text=str(z.score), font=("", 15))
+        d1.place(x=1000, y=20)
+        d2.place(x=1000, y=60)
+        d3.place(x=1000, y=100)
+        d4.place(x=1000, y=140)
+        d5.place(x=360, y=20)
+        d6.place(x=460, y=200)
+        d7.place(x=60, y=35)
+        d8.place(x=100, y=35)
         window_main.quit()
         main()
 
     def f_et1():
         if et1 == ans:
-            print("correct")
             cor()
         else:
-            print("incorrect")
-            cor()
+            incor()
 
     def f_et2():
         if et2 == ans:
-            print("correct")
             cor()
         else:
-            print("incorrect")
-            cor()
+            incor()
 
     def f_et3():
         if et3 == ans:
-            print("correct")
             cor()
         else:
-            print("incorrect")
-            cor()
+            incor()
 
     def f_et4():
         if et4 == ans:
-            print("correct")
             cor()
         else:
-            print("incorrect")
-            cor()
+            incor()
 
     # main starts
-
     global et1
     global et2
     global et3
@@ -251,6 +343,9 @@ def main():
     et4 = random.choice(list2)
     list2.remove(et4)
 
+    d.execute("SELECT * FROM High")
+    hh = d.fetchone()
+
     e1 = Button(window_main, text="Esc", command=esc_command)
     e2 = Button(window_main, text=et1, command=f_et1)
     e3 = Button(window_main, text=et2, command=f_et2)
@@ -258,6 +353,10 @@ def main():
     e5 = Button(window_main, text=et4, command=f_et4)
     e6 = Label(window_main, text=w3[0], font=("", 70))
     e7 = Label(window_main, text=w3[1], font=("", 20))
+    e8 = Label(window_main, text="Score:", font=("", 15))
+    e9 = Label(window_main, text="High score:")
+    e10 = Label(window_main, text=hh)
+
     e1.place(x=0, y=0)
     e2.place(x=1000, y=20)
     e3.place(x=1000, y=60)
@@ -265,11 +364,15 @@ def main():
     e5.place(x=1000, y=140)
     e6.place(x=360, y=20)
     e7.place(x=460, y=200)
+    e8.place(x=35, y=35)
+    e9.place(x=35, y=10)
+    e10.place(x=110, y=10)
 
     window_main.title("FlashCards")
     window_main.geometry("1250x405+5+5")
     window_main.resizable(False, False)
     window_main.mainloop()
+    conn.close()
 
 if __name__ == '__main__':
     main()
