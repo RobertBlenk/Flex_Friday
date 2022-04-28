@@ -204,18 +204,21 @@ def main():
 
         d.execute("INSERT INTO current VALUES (?, ?, ?)", (z.score, z.correct, z.incorrect))
         d.execute("SELECT * FROM current")
-        #  print(d.fetchall())
-        #  print("correct")
+        xd = d.fetchone()
+        s = xd[1] + xd[2]
+        s2 = 100 / s
+        xd1 = round(xd[1] * s2, 1)
+        xd2 = round(xd[2] * s2, 1)
+        print(str(xd1) + "% Correct")
+        print(str(xd2) + "% Incorrect")
 
         #  this is the high score portion of the code
         d.execute("SELECT * FROM High")
         hh = d.fetchone()
-        print(hh[0])
-        print(z.score)
+
         if int(z.score) > int(hh[0]):
             print("Beat High score")
             d.execute("DELETE FROM High")
-            f = input_score(z.score, 0, 0)
             d.execute("INSERT INTO High VALUES (:scr)", {'scr': z.score})
             db1 = Label(window_main, text="                             ")
             db2 = Label(window_main, text=str(z.score))
@@ -257,7 +260,13 @@ def main():
 
         d.execute("INSERT INTO current VALUES (?, ?, ?)", (z.score, z.correct, z.incorrect))
         d.execute("SELECT * FROM current")
-        #  print(d.fetchall())
+        xd = d.fetchone()
+        s = xd[1] + xd[2]
+        s2 = 100 / s
+        xd1 = round(xd[1] * s2, 1)
+        xd2 = round(xd[2] * s2, 1)
+        print(str(xd1) + "% Correct")
+        print(str(xd2) + "% Incorrect")
 
         #  print("incorrect")
         d1 = Label(window_main, text="                                   ", font=(" ", 100))
