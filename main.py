@@ -1,3 +1,4 @@
+import tkinter
 from tkinter import *
 import sqlite3
 import random
@@ -190,6 +191,78 @@ def main():
         window_esc.resizable(False, False)
         window_esc.mainloop()
 
+    def main_function():
+        global ans
+        global y1
+        global y2
+        global y3
+        global y4
+        c.execute("SELECT * FROM korean ")
+        x_list = list(c.fetchall())
+        x_set = set()
+        f = True
+
+        while f is True:
+            x = random.randint(0, (len(x_list) - 1))
+            x_set.add(x_list[x])
+
+            if len(x_set) >= 4:
+                f = False
+
+        x_list2 = list(x_set)
+        list2 = list("")
+
+        for r in range(0, 4):
+            l = list(x_list2[r])
+            list2.append(l[2])
+
+        w = x_list2[0]
+        w2 = Input_word(w[0], w[1], w[2], w[3])
+        c.execute("SELECT * FROM korean WHERE english= (:eng)", {'eng': w2.english})
+        w3 = c.fetchone()
+        ans = w3[2]
+
+        y1 = random.choice(list2)
+        list2.remove(y1)
+        y2 = random.choice(list2)
+        list2.remove(y2)
+        y3 = random.choice(list2)
+        list2.remove(y3)
+        y4 = random.choice(list2)
+        list2.remove(y4)
+
+        et1.set(y1)
+        et2.set(y2)
+        et3.set(y3)
+        et4.set(y4)
+        w3_0.set(w3[0])
+        w3_1.set(w3[1])
+
+        d.execute("SELECT * FROM High")
+        dd = d.fetchone()
+        hh.set(dd)
+        d.execute("SELECT * FROM current")
+        jj = d.fetchone()
+        hh2.set(jj[0])
+        window_main.update()
+
+    # main starts
+    global et1
+    global et2
+    global et3
+    global et4
+    global hh
+    global hh2
+    et1 = tkinter.StringVar()
+    et2 = tkinter.StringVar()
+    et3 = tkinter.StringVar()
+    et4 = tkinter.StringVar()
+    w3_0 = tkinter.StringVar()
+    w3_1 = tkinter.StringVar()
+    hh = tkinter.IntVar()
+    hh2 = tkinter.IntVar()
+    main_function()
+
     def cor():
         d.execute("SELECT * FROM current")
         x_ = d.fetchone()
@@ -214,9 +287,9 @@ def main():
 
         #  this is the high score portion of the code
         d.execute("SELECT * FROM High")
-        hh = d.fetchone()
+        ok = d.fetchone()
 
-        if int(z.score) > int(hh[0]):
+        if int(z.score) > int(ok[0]):
             print("Beat High score")
             d.execute("DELETE FROM High")
             d.execute("INSERT INTO High VALUES (:scr)", {'scr': z.score})
@@ -227,24 +300,7 @@ def main():
             donn.commit()
 
         #  this is just "resetting" the buttons by just "coloring" over them with spaces
-        d1 = Label(window_main, text="                                   ", font=(" ", 100))
-        d2 = Label(window_main, text="                                   ", font=(" ", 100))
-        d3 = Label(window_main, text="                                   ", font=(" ", 100))
-        d4 = Label(window_main, text="                                   ", font=(" ", 100))
-        d5 = Label(window_main, text="                                   ", font=(" ", 100))
-        d6 = Label(window_main, text="                                   ", font=(" ", 100))
-        d7 = Label(window_main, text="               ", font=("", 15))
-        d8 = Label(window_main, text=str(z.score), font=("", 15))
-        d1.place(x=1000, y=20)
-        d2.place(x=1000, y=60)
-        d3.place(x=1000, y=100)
-        d4.place(x=1000, y=140)
-        d5.place(x=360, y=20)
-        d6.place(x=460, y=200)
-        d7.place(x=60, y=35)
-        d8.place(x=100, y=35)
-        window_main.quit()
-        main()
+        main_function()
 
     def incor():
         d.execute("SELECT * FROM current")
@@ -269,102 +325,43 @@ def main():
         print(str(xd2) + "% Incorrect")
 
         #  print("incorrect")
-        d1 = Label(window_main, text="                                   ", font=(" ", 100))
-        d2 = Label(window_main, text="                                   ", font=(" ", 100))
-        d3 = Label(window_main, text="                                   ", font=(" ", 100))
-        d4 = Label(window_main, text="                                   ", font=(" ", 100))
-        d5 = Label(window_main, text="                                   ", font=(" ", 100))
-        d6 = Label(window_main, text="                                   ", font=(" ", 100))
-        d7 = Label(window_main, text="               ", font=("", 15))
-        d8 = Label(window_main, text=str(z.score), font=("", 15))
-        d1.place(x=1000, y=20)
-        d2.place(x=1000, y=60)
-        d3.place(x=1000, y=100)
-        d4.place(x=1000, y=140)
-        d5.place(x=360, y=20)
-        d6.place(x=460, y=200)
-        d7.place(x=60, y=35)
-        d8.place(x=100, y=35)
-        window_main.quit()
-        main()
+        main_function()
 
     def f_et1():
-        if et1 == ans:
+        if y1 == ans:
             cor()
         else:
             incor()
 
     def f_et2():
-        if et2 == ans:
+        if y2 == ans:
             cor()
         else:
             incor()
 
     def f_et3():
-        if et3 == ans:
+        if y3 == ans:
             cor()
         else:
             incor()
 
     def f_et4():
-        if et4 == ans:
+        if y4 == ans:
             cor()
         else:
             incor()
 
-    # main starts
-    global et1
-    global et2
-    global et3
-    global et4
-    global ans
-    c.execute("SELECT * FROM korean ")
-    x_list = list(c.fetchall())
-    x_set = set()
-    f = True
-
-    while f == True:
-        x = random.randint(0, (len(x_list) - 1))
-        x_set.add(x_list[x])
-
-        if len(x_set) >= 4:
-            f = False
-
-    x_list2 = list(x_set)
-    list2 = list("")
-
-    for r in range(0, 4):
-        l = list(x_list2[r])
-        list2.append(l[2])
-
-    w = x_list2[0]
-    w2 = Input_word(w[0], w[1], w[2], w[3])
-    c.execute("SELECT * FROM korean WHERE english= (:eng)", {'eng': w2.english})
-    w3 = c.fetchone()
-    ans = w3[2]
-
-    et1 = random.choice(list2)
-    list2.remove(et1)
-    et2 = random.choice(list2)
-    list2.remove(et2)
-    et3 = random.choice(list2)
-    list2.remove(et3)
-    et4 = random.choice(list2)
-    list2.remove(et4)
-
-    d.execute("SELECT * FROM High")
-    hh = d.fetchone()
-
     e1 = Button(window_main, text="Esc", command=esc_command)
-    e2 = Button(window_main, text=et1, command=f_et1)
-    e3 = Button(window_main, text=et2, command=f_et2)
-    e4 = Button(window_main, text=et3, command=f_et3)
-    e5 = Button(window_main, text=et4, command=f_et4)
-    e6 = Label(window_main, text=w3[0], font=("", 70))
-    e7 = Label(window_main, text=w3[1], font=("", 20))
+    e2 = Button(window_main, textvariable=et1, command=f_et1)
+    e3 = Button(window_main, textvariable=et2, command=f_et2)
+    e4 = Button(window_main, textvariable=et3, command=f_et3)
+    e5 = Button(window_main, textvariable=et4, command=f_et4)
+    e6 = Label(window_main, textvariable=w3_0, font=("", 70))
+    e7 = Label(window_main, textvariable=w3_1, font=("", 20))
     e8 = Label(window_main, text="Score:", font=("", 15))
     e9 = Label(window_main, text="High score:")
-    e10 = Label(window_main, text=hh)
+    e10 = Label(window_main, textvariable=hh)
+    e11 = Label(window_main, textvariable=hh2, font=("", 15))
 
     e1.place(x=0, y=0)
     e2.place(x=1000, y=20)
@@ -376,12 +373,14 @@ def main():
     e8.place(x=35, y=35)
     e9.place(x=35, y=10)
     e10.place(x=110, y=10)
+    e11.place(x=100, y=35)
 
     window_main.title("FlashCards")
     window_main.geometry("1250x405+5+5")
     window_main.resizable(False, False)
     window_main.mainloop()
     conn.close()
+
 
 if __name__ == '__main__':
     main()
